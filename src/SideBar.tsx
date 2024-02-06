@@ -24,8 +24,8 @@ export default function SideBar(props) {
             </svg>
           </div>
           <h2
-            className={`text-white text-lg mr-2 ${
-              props.mode ? " text-white" : " text-black"
+            className={` text-lg mr-2  ${
+              props.mode ? " text-white" : "  text-black"
             }`}
           >
             Notes App
@@ -60,16 +60,12 @@ export default function SideBar(props) {
             ))}
 
             <div
-              className="flex flex-row items-center px-5 h-10 text-[#645FC6]"
+              className="flex flex-row items-center px-5 h-10 text-[#645FC6] hover:-translate-y-1 hover:scale-110  duration-300"
               onClick={props.addNewBoard}
             >
               <p className="text-sm">+ Create new board</p>
             </div>
           </div>
-        </div>
-
-        <div>
-          <div></div>
         </div>
       </div>
     </section>

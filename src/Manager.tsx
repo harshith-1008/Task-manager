@@ -11,23 +11,28 @@ export default function Manager(props) {
     const done = [];
 
     props.data.forEach((board) => {
-      switch (board.tasks.status) {
-        case "todo":
-          todo.push(board.tasks);
-          break;
-        case "doing":
-          doing.push(board.tasks);
-          break;
-        case "done":
-          done.push(board.tasks);
-          break;
-      }
+      board.tasks.forEach((task) => {
+        switch (task.status) {
+          case "todo":
+            todo.push(task);
+            break;
+          case "doing":
+            doing.push(task);
+            break;
+          case "done":
+            done.push(task);
+            break;
+        }
+      });
     });
-
     setTodo(todo);
     setDoing(doing);
     setDone(done);
+    console.log(todo);
+    console.log(doing);
+    console.log(done);
   }, [props.data]);
+
   return (
     <main
       className={`h-screen py-3 px-4 pb-10 flex flex-row space-x-8 w-screen flex-nowrap mt-[5rem] md:mt-[4.75rem] md:ml-[12rem] overflow-x-scroll scrollbar-hidden  ${

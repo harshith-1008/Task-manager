@@ -8,33 +8,12 @@ import AddTask from "./AddTask";
 function App() {
   const [isDark, setIsDark] = useState(true);
   const [addNewTask, setAddNewTask] = useState(false);
+
   const [data, setData] = useState([
     {
       id: 1,
       name: "board1",
-      tasks: {
-        title: "make coffee",
-        description: "buy coffee powder and make coffee",
-        status: "todo",
-      },
-    },
-    {
-      id: 2,
-      name: "board2",
-      tasks: {
-        title: "Do homework",
-        description: "do maths homework",
-        status: "done",
-      },
-    },
-    {
-      id: 3,
-      name: "board3",
-      tasks: {
-        title: "complete mid prep",
-        description: "learn all the topics from syllabus",
-        status: "doing",
-      },
+      tasks: [{}],
     },
   ]);
 
@@ -50,6 +29,18 @@ function App() {
     console.log("new board created");
   };
 
+  const AddToData = (title, description, status) => {
+    setData((prevData) => {
+      const newData = [...prevData];
+      newData[0].tasks.push({
+        title: title,
+        description: description,
+        status: status,
+      });
+      return newData;
+    });
+  };
+  console.log(data);
   return (
     <div className="flex flex-row">
       <section>
@@ -63,7 +54,12 @@ function App() {
         </div>
         <div className="overflow-x-scroll scrollbar-hidden relative">
           <Manager mode={isDark} data={data} />
-          <AddTask showAddNew={addNewTask} mode={isDark} addTask={showAddNew} />
+          <AddTask
+            showAddNew={addNewTask}
+            mode={isDark}
+            addTask={showAddNew}
+            addToData={AddToData}
+          />
         </div>
       </section>
     </div>
