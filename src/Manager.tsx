@@ -4,34 +4,29 @@ export default function Manager(props) {
   const [Todo, setTodo] = useState([]);
   const [Doing, setDoing] = useState([]);
   const [Done, setDone] = useState([]);
-
   useEffect(() => {
     const todo = [];
     const doing = [];
     const done = [];
 
-    props.data.forEach((board) => {
-      board.tasks.forEach((task) => {
-        switch (task.status) {
-          case "todo":
-            todo.push(task);
-            break;
-          case "doing":
-            doing.push(task);
-            break;
-          case "done":
-            done.push(task);
-            break;
-        }
-      });
+    props.data.tasks.forEach((task) => {
+      switch (task.status) {
+        case "todo":
+          todo.push(task);
+          break;
+        case "doing":
+          doing.push(task);
+          break;
+        case "done":
+          done.push(task);
+          break;
+      }
     });
+
     setTodo(todo);
     setDoing(doing);
     setDone(done);
-    console.log(todo);
-    console.log(doing);
-    console.log(done);
-  }, [props.data]);
+  }, [props.data.tasks]);
 
   return (
     <main

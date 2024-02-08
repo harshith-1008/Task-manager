@@ -82,7 +82,7 @@ export default function AddTask(props) {
           onChange={handleDescriptionChange}
         ></textarea>
       </div>
-      <div className={`flex flex-col ${props.mode ? "" : "text-black"}`}>
+      {/* <div className={`flex flex-col ${props.mode ? "" : "text-black"}`}>
         <label>Subtasks</label>
         <div className="flex flex-row items-center space-x-6">
           <input
@@ -114,7 +114,7 @@ export default function AddTask(props) {
         >
           Add new Subtask
         </button>
-      </div>
+      </div> */}
       <div className={`flex flex-col ${props.mode ? "" : "text-black"}`}>
         <p>Status</p>
         <select
