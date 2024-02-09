@@ -1,4 +1,4 @@
-export default function Navbar(props) {
+export default function Navbar(props: any) {
   return (
     <nav
       className={`flex items-center py-6 px-1 justify-between font-sans fixed top-0 left-0 right-0 z-50 md:ml-[12.00010rem] border-b-[0.0063rem] border-gray-400  ${
@@ -33,7 +33,10 @@ export default function Navbar(props) {
             Task Manager
           </h1>
         </div>
-        <button className="flex hover:text-white mr-4">
+        <button
+          className="flex hover:text-white mr-4 md:hidden"
+          onClick={props.hideSideMobile}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

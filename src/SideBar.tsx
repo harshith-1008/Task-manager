@@ -1,11 +1,13 @@
 import { useState } from "react";
 
-export default function SideBar(props) {
+export default function SideBar(props: any) {
   const [newBoardName, setNewBoardName] = useState("");
 
   return (
     <section
-      className={`hidden md:flex md:flex-col md:h-screen md:w-[12rem] fixed top-0 left-0 z-40 border-r-[0.0063rem] border-gray-400 ${
+      className={`${
+        props.showSideMobile ? "flex h-auto w-[15rem]" : "hidden"
+      } md:flex md:flex-col md:h-full md:w-[12rem] fixed top-0 left-0 md:left-0 z-40 md:border-r-[0.0063rem] md:border-gray-400 ${
         props.mode ? "bg-[#2C2C38]" : "bg-white"
       }`}
     >
@@ -44,7 +46,7 @@ export default function SideBar(props) {
             ALL boards ({props.data.length})
           </h3>
           <div className="flex flex-col space-y-1">
-            {props.data.map((name, id) => (
+            {props.data.map((board: { name: string }, id: number) => (
               <div
                 className={`group flex flex-row items-center justify-between px-5 h-10 ${
                   props.activeBoard === id
@@ -52,7 +54,9 @@ export default function SideBar(props) {
                     : ""
                 }`}
                 key={id}
-                onClick={() => props.changeActiveBoard(id)}
+                onClick={() => {
+                  props.changeActiveBoard(id), props.hideSideMobile();
+                }}
               >
                 <div className="flex flex-row">
                   <svg
@@ -69,7 +73,7 @@ export default function SideBar(props) {
                       d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"
                     />
                   </svg>
-                  <p>{name.name}</p>
+                  <p>{board.name}</p>
                 </div>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -78,6 +82,7 @@ export default function SideBar(props) {
                   strokeWidth={1.5}
                   stroke="currentColor"
                   className="w-4 h-4 hidden group-hover:block hover:-translate-y-1 hover:scale-100 duration-300"
+                  onClick={() => props.deleteBoard(id)}
                 >
                   <path
                     strokeLinecap="round"
@@ -97,7 +102,7 @@ export default function SideBar(props) {
                 onChange={(e) => setNewBoardName(e.target.value)}
                 placeholder={"Board " + (props.data.length + 1)}
               ></input>
-              <div className="flex flex-row items-center text-[#645FC6] ">
+              <div className="flex flex-row items-center text-[#645FC6] mb-4">
                 <button
                   className=" text-sm"
                   onClick={() => props.addNewBoard(newBoardName)}

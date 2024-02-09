@@ -1,32 +1,42 @@
 import { useEffect, useState } from "react";
 
-export default function Manager(props) {
-  const [Todo, setTodo] = useState([]);
-  const [Doing, setDoing] = useState([]);
-  const [Done, setDone] = useState([]);
+interface Task {
+  title: string;
+  description: string;
+  status: string;
+  // Add any other properties your tasks have
+}
+
+export default function Manager(props: any) {
+  const [Todo, setTodo] = useState<Task[]>([]);
+  const [Doing, setDoing] = useState<Task[]>([]);
+  const [Done, setDone] = useState<Task[]>([]);
+
   useEffect(() => {
-    const todo = [];
-    const doing = [];
-    const done = [];
+    if (props.data && props.data.tasks) {
+      const todo: Task[] = [];
+      const doing: Task[] = [];
+      const done: Task[] = [];
 
-    props.data.tasks.forEach((task) => {
-      switch (task.status) {
-        case "todo":
-          todo.push(task);
-          break;
-        case "doing":
-          doing.push(task);
-          break;
-        case "done":
-          done.push(task);
-          break;
-      }
-    });
+      props.data.tasks.forEach((task: Task) => {
+        switch (task.status) {
+          case "todo":
+            todo.push(task);
+            break;
+          case "doing":
+            doing.push(task);
+            break;
+          case "done":
+            done.push(task);
+            break;
+        }
+      });
 
-    setTodo(todo);
-    setDoing(doing);
-    setDone(done);
-  }, [props.data.tasks]);
+      setTodo(todo);
+      setDoing(doing);
+      setDone(done);
+    }
+  }, [props.data, props.data.tasks]);
 
   return (
     <main
@@ -40,21 +50,43 @@ export default function Manager(props) {
           <div className="text-[#808D9C] text-md">Todo({Todo.length})</div>
         </div>
         <div className="flex flex-col space-y-3 pt-2 mx-2">
-          {Todo.map((tasks, index) => (
+          {Todo.map((tasks, id) => (
             <div
-              key={index}
-              className={` h-24 w-[16rem] rounded-xl drop-shadow-2xl shadow-blue py-6 px-3 ${
+              key={id}
+              className={` h-24 w-[16rem] rounded-xl drop-shadow-2xl shadow-blue py-6 px-3 flex flex-row justify-between ${
                 props.mode ? "bg-[#2C2C38]" : "bg-white"
               }`}
             >
-              <h3
-                className={`text-md ${
-                  props.mode ? "text-white" : "text-black"
+              <div className="flex flex-col">
+                <h3
+                  className={`text-md ${
+                    props.mode ? "text-white" : "text-black"
+                  }`}
+                >
+                  {tasks.title}
+                </h3>
+                <p className="text-[#737C8D] text-sm">{tasks.description}</p>
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className={`w-4 h-4 hover:-translate-y-1 duration-300 ${
+                  props.mode ? "text-white" : ""
                 }`}
+                onClick={() => {
+                  props.deleteTask(id);
+                  props.forcerender();
+                }}
               >
-                {tasks.title}
-              </h3>
-              <p className="text-[#737C8D] text-sm">{tasks.description}</p>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 12h14"
+                />
+              </svg>
             </div>
           ))}
         </div>
@@ -65,21 +97,40 @@ export default function Manager(props) {
           <div className="text-[#808D9C] text-md">Doing({Doing.length})</div>
         </div>
         <div className="flex flex-col space-y-3 pt-2 mx-2">
-          {Doing.map((tasks, index) => (
+          {Doing.map((tasks, id) => (
             <div
-              key={index}
-              className={` h-24 w-[16rem] rounded-xl drop-shadow-2xl shadow-blue py-6 px-3 ${
+              key={id}
+              className={` h-24 w-[16rem] rounded-xl drop-shadow-2xl shadow-blue py-6 px-3 flex flex-row justify-between ${
                 props.mode ? "bg-[#2C2C38]" : "bg-white"
               }`}
             >
-              <h3
-                className={`text-md ${
-                  props.mode ? "text-white" : "text-black"
+              <div className="flex flex-col">
+                <h3
+                  className={`text-md ${
+                    props.mode ? "text-white" : "text-black"
+                  }`}
+                >
+                  {tasks.title}
+                </h3>
+                <p className="text-[#737C8D] text-sm">{tasks.description}</p>
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className={`w-4 h-4 hover:-translate-y-1 duration-300 ${
+                  props.mode ? "text-white" : ""
                 }`}
+                onClick={() => props.deleteTask(id)}
               >
-                {tasks.title}
-              </h3>
-              <p className="text-[#737C8D] text-sm">{tasks.description}</p>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 12h14"
+                />
+              </svg>
             </div>
           ))}
         </div>
@@ -91,21 +142,40 @@ export default function Manager(props) {
           <div className="text-[#808D9C] text-md">Done({Done.length})</div>
         </div>
         <div className="flex flex-col space-y-3 pt-2 mx-2">
-          {Done.map((tasks, index) => (
+          {Done.map((tasks, id) => (
             <div
-              key={index}
-              className={` h-24 w-[16rem] rounded-xl drop-shadow-2xl shadow-blue py-6 px-3 ${
+              key={id}
+              className={` h-24 w-[16rem] rounded-xl drop-shadow-2xl shadow-blue py-6 px-3 flex flex-row justify-between ${
                 props.mode ? "bg-[#2C2C38]" : "bg-white"
               }`}
             >
-              <h3
-                className={`text-md ${
-                  props.mode ? "text-white" : "text-black"
+              <div className="flex flex-col">
+                <h3
+                  className={`text-md ${
+                    props.mode ? "text-white" : "text-black"
+                  }`}
+                >
+                  {tasks.title}
+                </h3>
+                <p className="text-[#737C8D] text-sm">{tasks.description}</p>
+              </div>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth={1.5}
+                stroke="currentColor"
+                className={`w-4 h-4 hover:-translate-y-1 duration-300 ${
+                  props.mode ? "text-white" : ""
                 }`}
+                onClick={() => props.deleteTask(id)}
               >
-                {tasks.title}
-              </h3>
-              <p className="text-[#737C8D] text-sm">{tasks.description}</p>
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M5 12h14"
+                />
+              </svg>
             </div>
           ))}
         </div>

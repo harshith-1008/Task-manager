@@ -1,19 +1,19 @@
 import { useState } from "react";
 
-export default function AddTask(props) {
+export default function AddTask(props: any) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [status, setStatus] = useState("");
 
-  const handleTitleChange = (event) => {
+  const handleTitleChange = (event: any) => {
     setTitle(event.target.value);
   };
 
-  const handleDescriptionChange = (event) => {
+  const handleDescriptionChange = (event: any) => {
     setDescription(event.target.value);
   };
 
-  const handleStatusChange = (event) => {
+  const handleStatusChange = (event: any) => {
     setStatus(event.target.value);
   };
 
@@ -21,7 +21,7 @@ export default function AddTask(props) {
     props.addToData(title, description, status);
   };
 
-  function handleSubmit(event) {
+  function handleSubmit(event: any) {
     event.preventDefault();
   }
 
@@ -73,7 +73,6 @@ export default function AddTask(props) {
         <label>Discription</label>
         <textarea
           required
-          type="text"
           placeholder="e.g. Its good to take small breaks"
           className={`${
             props.mode ? "bg-[#2c2c38]" : "bg-white"
