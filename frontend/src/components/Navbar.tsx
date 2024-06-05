@@ -1,4 +1,24 @@
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+
 export default function Navbar(props: any) {
+  const navigate = useNavigate();
+  async function logout() {
+    try {
+      const response = await axios.post(
+        "http://localhost:8000/api/v1/user/logout",
+        {},
+        { withCredentials: true }
+      );
+
+      console.log(response);
+      if (response.status === 200) {
+        navigate("/");
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
   return (
     <nav
       className={`flex items-center py-6 px-1 justify-between font-sans fixed top-0 left-0 right-0 z-50 md:ml-[12.00010rem] border-b-[0.0063rem] border-gray-400  ${
@@ -92,7 +112,7 @@ export default function Navbar(props: any) {
             />
           </svg>
         </div>
-        <div>
+        <div onClick={logout}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"

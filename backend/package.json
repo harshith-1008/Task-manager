@@ -2,9 +2,10 @@
   "name": "task-manager",
   "version": "1.0.0",
   "description": "",
+  "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon -r dotenv/config --experimental-json-modules src/index.js"
   },
   "author": "",
   "license": "ISC",
@@ -17,5 +18,8 @@
     "express-openid-connect": "^2.17.1",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.4.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.2"
   }
 }

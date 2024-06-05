@@ -1,11 +1,14 @@
-import { asyncHandler } from "./utils/asyncHandler.js";
-import { apiResponse } from "./utils/apiResponse.js";
-import { apiError } from "./utils/apiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { apiError } from "../utils/apiError.js";
 import { User } from "../models/user.model.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
     const user = await User.findById(userId);
+    if (!user) {
+      throw new apiError(404, "User not found");
+    }
     const accessToken = user.generateAccessToken();
     const refreshToken = user.generateRefreshToken();
     user.refreshToken = refreshToken;
@@ -51,14 +54,14 @@ const registerUser = asyncHandler(async (req, res) => {
 });
 
 const loginUser = asyncHandler(async (req, res) => {
-  const { username, email, password } = req.body;
+  const { username, password } = req.body;
 
-  if ((!username && !email) || !password) {
+  if (!username || !password) {
     throw new apiError(400, "all credentials must be provided");
   }
 
   const user = await User.findOne({
-    $or: [{ username }, { email }],
+    $or: [{ username }, { email: username }],
   });
 
   if (!user) {
@@ -81,14 +84,15 @@ const loginUser = asyncHandler(async (req, res) => {
   if (!loggedInUser) {
     throw new apiError(500, "error occured while fetching logged in user");
   }
-  const options = {
+  const option = {
     httpOnly: true,
     secure: true,
+    sameSite: "Lax",
   };
   return res
     .status(200)
-    .cookie("accessToken", accessToken, options)
-    .cookie("refreshToken", refreshToken, options)
+    .cookie("accessToken", accessToken, option)
+    .cookie("refreshToken", refreshToken, option)
     .json(
       new apiResponse(
         200,
@@ -103,31 +107,59 @@ const loginUser = asyncHandler(async (req, res) => {
 });
 
 const logoutUser = asyncHandler(async (req, res) => {
-  try {
-    await User.findByIdAndUpdate(
-      req.user._id,
-      {
-        $unset: {
-          refreshToken: 1,
-        },
+  await User.findByIdAndUpdate(
+    req.user._id,
+    {
+      $unset: {
+        refreshToken: 1,
       },
-      {
-        new: true,
-      }
-    );
+    },
+    {
+      new: true,
+    }
+  );
 
-    const options = {
-      httpOnly: true,
-      secure: true,
-    };
+  const option = {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production", // Set to true if using HTTPS in production
+  };
 
+  return res
+    .status(200)
+    .clearCookie("accessToken", option)
+    .clearCookie("refreshToken", option)
+    .json(new apiResponse(200, {}, "User logged out"));
+});
+
+const refreshAccessToken = asyncHandler(async (req, res) => {
+  const refreshToken = req.cookies?.refreshToken;
+  if (!refreshToken) {
+    throw new apiError(401, "No refresh token provided");
+  }
+
+  try {
+    const decoded = jwt.verify(refreshToken, process.env.REFRESH_TOKEN_SECRET);
+    const user = await User.findById(decoded._id);
+    if (!user || user.refreshToken !== refreshToken) {
+      throw new apiError(401, "Invalid refresh token");
+    }
+
+    const newAccessToken = user.generateAccessToken();
     return res
       .status(200)
-      .clearCookie("accessToken", options)
-      .clearCookie("refreshToken", options)
-      .json(new apiResponse(200, {}, "User logged Out"));
+      .json(
+        new apiResponse(
+          200,
+          { accessToken: newAccessToken },
+          "Access token refreshed"
+        )
+      );
   } catch (err) {
-    throw new apiError(500, err, "error occured while logging out");
+    res.clearCookie("refreshToken");
+    throw new apiError(401, err.message || "Invalid refresh token");
   }
 });
+
+export { refreshAccessToken };
+
 export { loginUser, registerUser, logoutUser };

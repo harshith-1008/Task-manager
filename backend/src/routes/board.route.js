@@ -5,13 +5,13 @@ import {
   getBoard,
   deleteBoard,
 } from "../controllers/board.controller.js";
-import { verifyJwt } from "../middlewares/auth.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 
 const router = Router();
-router.use(verifyJwt);
+router.use(verifyJWT);
 router.route("/create-board").post(createBoard);
 router.route("/change-board-name").post(changeBoardName);
-router.route("/get-board/:boardName").get(getBoard);
+router.route("/get-board/:boardId").get(getBoard);
 router.route("/delete-board").delete(deleteBoard);
 
 export default router;

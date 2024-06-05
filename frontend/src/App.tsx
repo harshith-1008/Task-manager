@@ -1,9 +1,12 @@
 import { useState } from "react";
 import "./App.css";
-import Manager from "./Manager";
-import Navbar from "./Navbar";
-import SideBar from "./SideBar";
-import AddTask from "./AddTask";
+import Manager from "./components/Manager.tsx";
+import Navbar from "./components/Navbar.tsx";
+import SideBar from "./components/SideBar.tsx";
+import AddTask from "./components/AddTask.tsx";
+import Login from "./components/Login.tsx";
+import Register from "./components/Register.tsx";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 
 function App() {
   const [isDark, setIsDark] = useState(true);
@@ -71,42 +74,55 @@ function App() {
   console.log(data);
 
   return (
-    <div className="flex flex-row">
-      <section>
-        <div className={`${showSideMobile ? "flex" : "hidden"} md:flex`}>
-          <SideBar
-            mode={isDark}
-            data={data}
-            addNewBoard={addNewBoard}
-            changeActiveBoard={changeActiveBoard}
-            activeBoard={activeBoard}
-            deleteBoard={deleteBoard}
-            showSideMobile={showSideMobile}
-            hideSideMobile={hideSideMobile}
-          />
-        </div>
-      </section>
-      <section className="flex flex-col">
-        <div className="">
-          <Navbar
-            mode={isDark}
-            changemode={changeMode}
-            addTask={showAddNew}
-            showSideMobile={showSideMobile}
-            hideSideMobile={hideSideMobile}
-          />
-        </div>
-        <div className="overflow-x-scroll scrollbar-hidden relative">
-          <Manager mode={isDark} data={data[activeBoard]} />
-          <AddTask
-            showAddNew={addNewTask}
-            mode={isDark}
-            addTask={showAddNew}
-            addToData={AddToData}
-          />
-        </div>
-      </section>
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Login />}></Route>
+        <Route path="/register" element={<Register />}></Route>
+        <Route
+          path="/home"
+          element={
+            <div className="flex flex-row">
+              <section>
+                <div
+                  className={`${showSideMobile ? "flex" : "hidden"} md:flex`}
+                >
+                  <SideBar
+                    mode={isDark}
+                    data={data}
+                    addNewBoard={addNewBoard}
+                    changeActiveBoard={changeActiveBoard}
+                    activeBoard={activeBoard}
+                    deleteBoard={deleteBoard}
+                    showSideMobile={showSideMobile}
+                    hideSideMobile={hideSideMobile}
+                  />
+                </div>
+              </section>
+              <section className="flex flex-col">
+                <div className="">
+                  <Navbar
+                    mode={isDark}
+                    changemode={changeMode}
+                    addTask={showAddNew}
+                    showSideMobile={showSideMobile}
+                    hideSideMobile={hideSideMobile}
+                  />
+                </div>
+                <div className="overflow-x-scroll scrollbar-hidden relative">
+                  <Manager mode={isDark} data={data[activeBoard]} />
+                  <AddTask
+                    showAddNew={addNewTask}
+                    mode={isDark}
+                    addTask={showAddNew}
+                    addToData={AddToData}
+                  />
+                </div>
+              </section>
+            </div>
+          }
+        ></Route>
+      </Routes>
+    </Router>
   );
 }
 

@@ -1,5 +1,5 @@
 import Router from "express";
-import { verifyJwt } from "../middlewares/auth.middleware.js";
+import { verifyJWT } from "../middlewares/auth.middleware.js";
 import {
   modifyTask,
   deleteTask,
@@ -7,10 +7,10 @@ import {
 } from "../controllers/task.controller.js";
 const router = Router();
 
-router.use(verifyJwt);
+router.use(verifyJWT);
 
-router.route("/add-task").post(addTask);
-router.route("/:taskId/delete-task").delete(deleteTask);
-router.route("/:taskId/change-task-status").post(modifyTask);
+router.route("/:boardId/tasks/add-task").post(addTask);
+router.route("/:boardId/tasks/:taskId/delete-task").delete(deleteTask);
+router.route("/:boardId/tasks/:taskId/change-task-status").post(modifyTask);
 
 export default router;

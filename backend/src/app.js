@@ -20,8 +20,8 @@ import userRouter from "./routes/user.route.js";
 import boardRouter from "./routes/board.route.js";
 import taskRouter from "./routes/task.route.js";
 
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/boards", boardRouter);
-app.use("/api/v1/boards/:boardId/tasks", taskRouter);
+app.use("/api/v1/user", userRouter);
+app.use("/api/v1/board", boardRouter);
+app.use("/api/v1/board", taskRouter);
 
 export { app };

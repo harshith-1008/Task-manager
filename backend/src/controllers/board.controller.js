@@ -1,11 +1,11 @@
 import { Board } from "../models/board.model.js";
-import { asyncHandler } from "./utils/asyncHandler.js";
-import { apiResponse } from "./utils/apiResponse.js";
-import { apiError } from "./utils/apiError.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { apiError } from "../utils/apiError.js";
 
 const createBoard = asyncHandler(async (req, res) => {
   const userId = req.user?._id;
-  let boardName = req.body;
+  let { boardName } = req.body;
 
   if (!boardName) {
     boardName = "untitled";
@@ -22,16 +22,17 @@ const createBoard = asyncHandler(async (req, res) => {
 });
 
 const getBoard = asyncHandler(async (req, res) => {
-  const boardName = req.query.boardName;
+  const { boardId } = req.params;
   const user = req.user?._id;
 
-  if (!boardName || !user) {
+  if (!boardId || !user) {
     throw new apiError(400, "boardname is required");
   }
 
-  const board = await Board.find({
-    $and: [{ boardName }, { user }],
+  const board = await Board.findOne({
+    $and: [{ _id: boardId }, { user }],
   });
+
   if (!board) {
     throw new apiError(400, "board doesnt exists");
   }

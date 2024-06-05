@@ -1,11 +1,14 @@
-import { Task } from "./models/task.model.js";
-import { asyncHandler } from "./utils/asyncHandler.js";
-import { apiResponse } from "./utils/apiResponse.js";
-import { apiError } from "./utils/apiError.js";
+import { Task } from "../models/task.model.js";
+import { asyncHandler } from "../utils/asyncHandler.js";
+import { apiResponse } from "../utils/apiResponse.js";
+import { apiError } from "../utils/apiError.js";
 
 const addTask = asyncHandler(async (req, res) => {
+  console.log(req.params);
   const { boardId } = req.params;
   const { title, description, status } = req.body;
+  console.log(boardId);
+  console.log(title, status);
   if (!boardId) {
     throw new apiError(400, "board must be given");
   }
