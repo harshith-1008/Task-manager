@@ -45,13 +45,15 @@ export default function Navbar(props: any) {
           </svg>
         </div>
         <div className="flex">
-          <h1
-            className={` ${
-              props.mode ? " text-white" : "text-black"
-            } text-xl pr-2`}
-          >
-            Task Manager
-          </h1>
+          {props.isDashboard && (
+            <h1
+              className={` ${
+                props.mode ? " text-white" : "text-black"
+              } text-xl pr-2`}
+            >
+              Dashboard
+            </h1>
+          )}
         </div>
         <button
           className="flex hover:text-white mr-4 md:hidden"
@@ -74,25 +76,28 @@ export default function Navbar(props: any) {
         </button>
       </div>
       <div className="flex items-center">
-        <button
-          className="flex text-white bg-[#665DC8] h-7 w-12 rounded-xl items-center justify-center px-3 hover:bg-white hover:text-[#665DC8]"
-          onClick={props.addTask}
-        >
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={3}
-            stroke="currentColor"
-            className=" w-4 h-4 "
+        {!props.isDashboard && (
+          <button
+            className="flex text-white bg-[#665DC8] h-7 w-12 rounded-xl items-center justify-center px-3 hover:bg-white hover:text-[#665DC8]"
+            onClick={props.addTask}
           >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M12 4.5v15m7.5-7.5h-15"
-            />
-          </svg>
-        </button>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              fill="none"
+              viewBox="0 0 24 24"
+              strokeWidth={3}
+              stroke="currentColor"
+              className=" w-4 h-4 "
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M12 4.5v15m7.5-7.5h-15"
+              />
+            </svg>
+          </button>
+        )}
+
         <div
           className="flex flex-row bg-[#2121D] mx-4"
           onClick={props.changemode}

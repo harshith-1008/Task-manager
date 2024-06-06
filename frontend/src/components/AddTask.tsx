@@ -18,7 +18,7 @@ export default function AddTask(props: any) {
   };
 
   const sendTask = () => {
-    props.addToData(title, description, status);
+    props.addNewData(title, description, status);
   };
 
   function handleSubmit(event: any) {
@@ -81,39 +81,6 @@ export default function AddTask(props: any) {
           onChange={handleDescriptionChange}
         ></textarea>
       </div>
-      {/* <div className={`flex flex-col ${props.mode ? "" : "text-black"}`}>
-        <label>Subtasks</label>
-        <div className="flex flex-row items-center space-x-6">
-          <input
-            type="text"
-            className={` ${
-              props.mode ? "bg-[#2c2c38]" : "bg-white"
-            } border-[0.0063rem] border-[#455451] w-5/6 h-8 rounded-md p-2 md:w-5/6 mb-2`}
-          ></input>
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            fill="none"
-            viewBox="0 0 24 24"
-            strokeWidth={1.5}
-            stroke="currentColor"
-            className="w-8 h-8 pb-2"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              d="M6 18 18 6M6 6l12 12"
-            />
-          </svg>
-        </div>
-        <button
-          type="button"
-          className={`flex  text-[#665DC8] px-2 justify-center items-center rounded-3xl h-10 ${
-            props.mode ? "bg-white" : "bg-[#F3F4F6]"
-          }`}
-        >
-          Add new Subtask
-        </button>
-      </div> */}
       <div className={`flex flex-col ${props.mode ? "" : "text-black"}`}>
         <p>Status</p>
         <select

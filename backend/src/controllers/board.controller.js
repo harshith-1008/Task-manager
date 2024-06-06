@@ -21,25 +21,25 @@ const createBoard = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, createdBoard, "board created succesfully"));
 });
 
-const getBoard = asyncHandler(async (req, res) => {
-  const { boardId } = req.params;
+const getBoardNames = asyncHandler(async (req, res) => {
   const user = req.user?._id;
+  console.log("this is called");
 
-  if (!boardId || !user) {
-    throw new apiError(400, "boardname is required");
+  if (!user) {
+    throw new apiError(200, "user nor given");
   }
 
-  const board = await Board.findOne({
-    $and: [{ _id: boardId }, { user }],
-  });
+  const boardNames = await Board.find({ user: user }).select(
+    "-user -createdAt -updatedAt"
+  );
 
-  if (!board) {
-    throw new apiError(400, "board doesnt exists");
+  if (!boardNames) {
+    throw new apiError(500, "error fetching board names");
   }
-
+  console.log(boardNames);
   return res
     .status(200)
-    .json(new apiResponse(200, board, "board fetched succesfully"));
+    .json(new apiResponse(200, boardNames, "boards fetched succesfully"));
 });
 
 const changeBoardName = asyncHandler(async (req, res) => {
@@ -89,4 +89,4 @@ const deleteBoard = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, deletedBoard, "board deleted succesfully"));
 });
 
-export { createBoard, changeBoardName, getBoard, deleteBoard };
+export { createBoard, changeBoardName, deleteBoard, getBoardNames };

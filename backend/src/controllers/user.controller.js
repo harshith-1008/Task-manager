@@ -2,6 +2,8 @@ import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { apiError } from "../utils/apiError.js";
 import { User } from "../models/user.model.js";
+import { Board } from "../models/board.model.js";
+import { Task } from "../models/task.model.js";
 
 const generateAccessAndRefreshTokens = async (userId) => {
   try {
@@ -131,6 +133,56 @@ const logoutUser = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, {}, "User logged out"));
 });
 
+const getUserStats = asyncHandler(async (req, res) => {
+  const userId = req.user?._id;
+
+  if (!userId) {
+    throw new apiError(400, "User ID not provided");
+  }
+
+  const boards = await Board.find({ user: userId }).select("_id");
+  const boardIds = boards.map((board) => board._id);
+
+  const totalBoards = boards.length;
+
+  const tasks = await Task.aggregate([
+    {
+      $match: {
+        board: {
+          $in: boardIds,
+        },
+      },
+    },
+    {
+      $group: {
+        _id: "$status",
+        count: { $sum: 1 },
+      },
+    },
+  ]);
+
+  const taskCounts = {
+    todo: 0,
+    doing: 0,
+    done: 0,
+  };
+
+  tasks.forEach((task) => {
+    taskCounts[task._id] = task.count;
+  });
+
+  return res.status(200).json(
+    new apiResponse(
+      200,
+      {
+        totalBoards,
+        taskCounts,
+      },
+      "User stats fetched successfully"
+    )
+  );
+});
+
 const refreshAccessToken = asyncHandler(async (req, res) => {
   const refreshToken = req.cookies?.refreshToken;
   if (!refreshToken) {
@@ -161,5 +213,4 @@ const refreshAccessToken = asyncHandler(async (req, res) => {
 });
 
 export { refreshAccessToken };
-
-export { loginUser, registerUser, logoutUser };
+export { loginUser, registerUser, logoutUser, getUserStats };

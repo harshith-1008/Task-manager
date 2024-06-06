@@ -2,13 +2,12 @@ import { Task } from "../models/task.model.js";
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { apiResponse } from "../utils/apiResponse.js";
 import { apiError } from "../utils/apiError.js";
+import { Board } from "../models/board.model.js";
 
 const addTask = asyncHandler(async (req, res) => {
-  console.log(req.params);
   const { boardId } = req.params;
   const { title, description, status } = req.body;
-  console.log(boardId);
-  console.log(title, status);
+
   if (!boardId) {
     throw new apiError(400, "board must be given");
   }
@@ -81,4 +80,29 @@ const modifyTask = asyncHandler(async (req, res) => {
     .json(new apiResponse(200, modifiedTask, "task modified succesfuly"));
 });
 
-export { addTask, deleteTask, modifyTask };
+const getBoardTasks = asyncHandler(async (req, res) => {
+  const { boardId } = req.params;
+  const user = req.user?._id;
+
+  if (!boardId || !user) {
+    throw new apiError(400, "boardname is required");
+  }
+
+  const boardIsPresent = await Board.findById(boardId);
+
+  if (!boardIsPresent) {
+    throw new apiError(400, "board doesnt exist");
+  }
+
+  const board = await Task.find({ board: boardId });
+
+  if (board === [] || board === null) {
+    return res.status(200).json(new apiResponse(200, board, "no tasks"));
+  }
+
+  return res
+    .status(200)
+    .json(new apiResponse(200, board, "board fetched succesfully"));
+});
+
+export { addTask, deleteTask, modifyTask, getBoardTasks };

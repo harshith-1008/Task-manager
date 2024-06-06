@@ -4,11 +4,12 @@ import {
   modifyTask,
   deleteTask,
   addTask,
+  getBoardTasks,
 } from "../controllers/task.controller.js";
 const router = Router();
 
 router.use(verifyJWT);
-
+router.route("/:boardId/tasks/get-board-tasks").get(getBoardTasks);
 router.route("/:boardId/tasks/add-task").post(addTask);
 router.route("/:boardId/tasks/:taskId/delete-task").delete(deleteTask);
 router.route("/:boardId/tasks/:taskId/change-task-status").post(modifyTask);
