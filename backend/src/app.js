@@ -26,4 +26,8 @@ app.use("/api/v1/user", userRouter);
 app.use("/api/v1/board", boardRouter);
 app.use("/api/v1/board", taskRouter);
 
+app.get("/", (req, res) => {
+  res.send("Server is running!");
+});
+
 export { app };
