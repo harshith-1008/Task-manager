@@ -4,12 +4,11 @@ import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [username, setUsername] = useState("");
-
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   function changeUsernameOrEmailField(e: any) {
-    console.log(e);
     setUsername(e.target.value);
   }
   function changePassword(e: any) {
@@ -19,7 +18,7 @@ export default function Login() {
   async function validate() {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/user/login",
+        `${apiUrl}/user/login`,
         {
           username: username,
           password,
@@ -38,13 +37,13 @@ export default function Login() {
   }
 
   return (
-    <section className="flex items-center justify-center border border-white border-solid bg-black h-screen">
-      <div className="flex flex-col items-center justify-center bg-black  px-[6rem] py-[6rem] rounded-3xl  mt-14  space-y-4 border-white border-solid border-2">
-        <h1 className="text-bold text-white text-3xl mb-[2rem]">Login</h1>
+    <section className="flex items-center justify-center border border-white border-solid  h-screen ">
+      <div className="flex flex-col items-center justify-center drop-shadow-2xl w-5/6 h-3/6 space-y-3 rounded-xl  md:px-[6rem] md:py-[6rem] md:rounded-3xl md:mt-14  md:space-y-4  border-solid border-2">
+        <h1 className="text-bold text-black text-3xl mb-[2rem]">Login</h1>
         <div>
           <input
             type="text"
-            className=" border border-solid rounded-[0.5rem] text-white border-slate-200 bg-black pl-[0.5rem] h-[2.5rem] w-[20rem]"
+            className=" border border-solid rounded-[0.5rem] text-black border-slate-200 pl-[0.5rem] h-[2.5rem] w-[20rem]"
             value={username}
             placeholder="username or email"
             onChange={changeUsernameOrEmailField}
@@ -54,13 +53,13 @@ export default function Login() {
         <div>
           <input
             type="text"
-            className="border border-solid rounded-[0.5rem] text-white border-slate-200 bg-black pl-[0.5rem] h-[2.5rem] w-[20rem]"
+            className="border border-solid rounded-[0.5rem] text-black border-slate-200  pl-[0.5rem] h-[2.5rem] w-[20rem]"
             value={password}
             placeholder="password"
             onChange={changePassword}
           />
         </div>
-        <div className="flex flex-row text-white space-x-1 ml-[-5rem]">
+        <div className="flex flex-row  space-x-1 ml-[-5rem]">
           <p>dont have an account?</p>
           <Link to="/register">
             <p className=" text-blue-600">click here</p>
@@ -68,7 +67,7 @@ export default function Login() {
         </div>
         <div>
           <button
-            className="bg-white mt-[2rem] py-2 px-[5rem] rounded-[1rem] hover:bg-black hover:text-white hover:border-white hover:border "
+            className="bg-[#665DC8] mt-[2rem] py-2 px-[5rem] rounded-[1rem] hover:bg-black text-white hover:border-white hover:border "
             onClick={validate}
           >
             LOGIN

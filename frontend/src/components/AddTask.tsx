@@ -19,6 +19,9 @@ export default function AddTask(props: any) {
 
   const sendTask = () => {
     props.addNewData(title, description, status);
+    setTitle("");
+    setDescription("");
+    setStatus("");
   };
 
   function handleSubmit(event: any) {

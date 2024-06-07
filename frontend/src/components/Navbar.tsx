@@ -3,10 +3,11 @@ import { useNavigate } from "react-router-dom";
 
 export default function Navbar(props: any) {
   const navigate = useNavigate();
+  const apiUrl = import.meta.env.VITE_API_URL;
   async function logout() {
     try {
       const response = await axios.post(
-        "http://localhost:8000/api/v1/user/logout",
+        `${apiUrl}/user/logout`,
         {},
         { withCredentials: true }
       );

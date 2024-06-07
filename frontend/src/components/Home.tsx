@@ -10,12 +10,13 @@ const Home = () => {
   const [isDark, setIsDark] = useState(true);
   const [addNewTask, setAddNewTask] = useState(false);
   const [showSideMobile, setShowSideMobile] = useState(false);
-  const [activeBoard, setActiveBoard] = useState("665c14e0fca94a11c3e2a53a");
+  const [activeBoard, setActiveBoard] = useState("");
   const [isDashboard, setIsDashboard] = useState(true);
   const [userStats, setUserStats] = useState([]);
   const [boardNames, setBoardNames] = useState([]);
   const [tasks, setTasks] = useState([]);
   const location = useLocation();
+  const apiUrl = import.meta.env.VITE_API_URL;
 
   useEffect(() => {
     setIsDashboard(location.pathname === "/dashboard");
@@ -40,10 +41,9 @@ const Home = () => {
   useEffect(() => {
     const getUserStats = async () => {
       try {
-        const response = await axios.get(
-          "http://localhost:8000/api/v1/user/get-user-stats",
-          { withCredentials: true }
-        );
+        const response = await axios.get(`${apiUrl}/user/get-user-stats`, {
+          withCredentials: true,
+        });
         setUserStats(response.data.data);
       } catch (err) {
         console.log(err);
@@ -55,7 +55,7 @@ const Home = () => {
   const createBoard = async (boardName: string) => {
     try {
       await axios.post(
-        "http://localhost:8000/api/v1/board/create-board",
+        `${apiUrl}/board/create-board`,
         { boardName },
         { withCredentials: true }
       );
@@ -69,10 +69,9 @@ const Home = () => {
   const getBoardNames = async () => {
     try {
       console.log("this is called");
-      const response = await axios.get(
-        "http://localhost:8000/api/v1/board/get-board-names",
-        { withCredentials: true }
-      );
+      const response = await axios.get(`${apiUrl}/board/get-board-names`, {
+        withCredentials: true,
+      });
       console.log(response.data.data);
       setBoardNames(response.data.data);
     } catch (err) {
@@ -86,7 +85,7 @@ const Home = () => {
   const deleteBoard = async (boardName: string) => {
     try {
       await axios.post(
-        "http://localhost:8000/api/v1/board/delete-board",
+        `${apiUrl}/board/delete-board`,
         { boardName },
         { withCredentials: true }
       );
@@ -100,7 +99,7 @@ const Home = () => {
   const getBoardTasks = async () => {
     try {
       const response = await axios.get(
-        `http://localhost:8000/api/v1/board/${activeBoard}/tasks/get-board-tasks`,
+        `${apiUrl}/board/${activeBoard}/tasks/get-board-tasks`,
         { withCredentials: true }
       );
 
@@ -120,7 +119,7 @@ const Home = () => {
   ) => {
     try {
       await axios.post(
-        `http://localhost:8000/api/v1/board/${activeBoard}/tasks/add-task`,
+        `${apiUrl}/board/${activeBoard}/tasks/add-task`,
         {
           title,
           description,
@@ -137,7 +136,7 @@ const Home = () => {
   const deleteTask = async (taskId: string) => {
     try {
       await axios.delete(
-        ` http://localhost:8000/api/v1/board/${activeBoard}/tasks/${taskId}/delete-task`,
+        ` ${apiUrl}/board/${activeBoard}/tasks/${taskId}/delete-task`,
         { withCredentials: true }
       );
 
@@ -150,7 +149,7 @@ const Home = () => {
   const modifyTask = async (status: string, taskId: string) => {
     try {
       await axios.post(
-        ` http://localhost:8000/api/v1/board/${activeBoard}/tasks/${taskId}/modify-task`,
+        ` ${apiUrl}/board/${activeBoard}/tasks/${taskId}/modify-task`,
         { status },
         { withCredentials: true }
       );

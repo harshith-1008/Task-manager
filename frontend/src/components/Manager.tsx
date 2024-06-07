@@ -45,25 +45,34 @@ export default function Manager(props: any) {
           props.mode ? " bg-[#21212D]" : " bg-gray-100"
         }`}
       >
-        <div className="flex flex-col justify-center items-center text-white py-5 px-10 mb-3 mt-[-15rem] bg-[#665DC8] rounded-lg">
-          <h1 className="text-8xl">Total Boards</h1>
-          <p className="text-5xl">{props.userStats.totalBoards}</p>
+        <div className="flex flex-col justify-center items-center text-white py-5 px-10 mb-2 mt-[-15rem] bg-[#665DC8] rounded-lg">
+          <h1 className="text-5xl md:text-8xl">Total Boards</h1>
+          <p className="text-3xl md:text-5xl">{props.userStats.totalBoards}</p>
         </div>
-        <div className="flex justify-center items-center text-white py-2 bg-[#665DC8] rounded-lg  mb-3 w-[36rem]">
+        <div
+          className="flex justify-center items-center text-white md:py-2 
+        bg-[#665DC8] rounded-lg mb-2 md:mb-3 w-[22rem] md:w-[36rem]"
+        >
           Task highlights
         </div>
-        <div className="flex flex-row justify-center items-center space-x-6">
-          <div className="basis-1/3 flex flex-col justify-center items-center text-white p-5 bg-[#665DC8] rounded-lg">
-            <h1 className="text-5xl">TODO</h1>
-            <p className="text-3xl">{props.userStats.taskCounts?.todo}</p>
+        <div className="flex flex-col md:flex-row justify-center items-center md:space-x-6">
+          <div className="md:basis-1/3 mb-2 flex flex-col justify-center items-center w-[20rem] text-white p-5 bg-[#665DC8] rounded-lg">
+            <h1 className="text-3xl md:text-5xl">TODO</h1>
+            <p className="text-xl md:text-3xl">
+              {props.userStats.taskCounts?.todo}
+            </p>
           </div>
-          <div className="basis-1/3 flex flex-col justify-center items-center text-white p-5 bg-[#665DC8] rounded-lg">
-            <h1 className="text-5xl">DOING</h1>
-            <p className="text-3xl">{props.userStats.taskCounts?.doing}</p>
+          <div className="md:basis-1/3 mb-2 flex flex-col justify-center items-center w-[20rem] text-white p-5 bg-[#665DC8] rounded-lg">
+            <h1 className="text-3xl  md:text-5xl">ONGOING</h1>
+            <p className="text-xl md:text-3xl">
+              {props.userStats.taskCounts?.doing}
+            </p>
           </div>
-          <div className=" basis-1/3 flex flex-col justify-center items-center text-white p-5 bg-[#665DC8] rounded-lg">
-            <h1 className="text-5xl">DONE</h1>
-            <p className="text-3xl">{props.userStats.taskCounts?.done}</p>
+          <div className="md:basis-1/3 flex flex-col justify-center items-center w-[20rem] text-white p-5 bg-[#665DC8] rounded-lg">
+            <h1 className=" text-3xl md:text-5xl">FINISHED</h1>
+            <p className="text-xl md:text-3xl">
+              {props.userStats.taskCounts?.done}
+            </p>
           </div>
         </div>
       </main>
