@@ -5,6 +5,8 @@ import { Link, useNavigate } from "react-router-dom";
 export default function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
   const apiUrl = import.meta.env.VITE_API_URL;
 
@@ -16,6 +18,12 @@ export default function Login() {
   }
 
   async function validate() {
+    if (username === "" || password === "") {
+      setErrorMessage("All credentials must be entered");
+      return;
+    }
+    setLoading(true);
+    setErrorMessage("");
     try {
       const response = await axios.post(
         `${apiUrl}/user/login`,
@@ -25,14 +33,26 @@ export default function Login() {
         },
         { withCredentials: true }
       );
+      setLoading(false);
       setUsername("");
       setPassword("");
 
       if (response.status === 200) {
         navigate("/home");
       }
-    } catch (err) {
-      console.log(err);
+    } catch (err: any) {
+      setLoading(false);
+      if (err.response) {
+        if (err.response.status === 400) {
+          setErrorMessage("User doesnt exists");
+        } else if (err.response.status === 401) {
+          setErrorMessage("Wrong credentials");
+        } else {
+          setErrorMessage("An error occurred. Please try again.");
+        }
+      } else {
+        setErrorMessage("Network error. Please check your connection.");
+      }
     }
   }
 
@@ -59,6 +79,12 @@ export default function Login() {
             onChange={changePassword}
           />
         </div>
+        {errorMessage != "" && (
+          <div className=" bg-red-200 w-[20rem] rounded-md items-center flex justify-center">
+            <p>{errorMessage}</p>
+          </div>
+        )}
+        {loading && <div className="text-black">Loading...</div>}
         <div className="flex flex-row  space-x-1 ml-[-5rem]">
           <p>dont have an account?</p>
           <Link to="/register">
@@ -70,7 +96,7 @@ export default function Login() {
             className="bg-[#665DC8] mt-[2rem] py-2 px-[5rem] rounded-[1rem] hover:bg-black text-white hover:border-white hover:border "
             onClick={validate}
           >
-            LOGIN
+            {loading ? "Logging in..." : "LOGIN"}
           </button>
         </div>
       </div>
