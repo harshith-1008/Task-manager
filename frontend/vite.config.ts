@@ -6,7 +6,7 @@ export default defineConfig({
   plugins: [react()],
   server: {
     proxy: {
-      "/api": "task-manager-api-eta.vercel.app",
+      "/api": "http://localhost:8000",
     },
   },
 });

@@ -33,6 +33,7 @@ export default function Login() {
         },
         { withCredentials: true }
       );
+      console.log(response);
       setLoading(false);
       setUsername("");
       setPassword("");
