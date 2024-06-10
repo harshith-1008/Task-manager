@@ -6,7 +6,8 @@ const app = express();
 
 app.use(
   cors({
-    origin: "*",
+    origin: "https://task-manager-frontend-gold-zeta.vercel.app",
+    methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true,
   })
 );
